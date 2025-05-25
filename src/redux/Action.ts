@@ -1,8 +1,16 @@
-export const ADD_CONTACTS_ACTION = 'ADD_CONTACTS'
+export const FIND_CONTACTS_NAME_ACTION = 'FIND_CONTACTS_NAME_ACTION'
+export const FIND_CONTACTS_GROUP_ID_ACTION = 'FIND_CONTACTS_GROUP_ID_ACTION'
 
-export function addContactActionCreator() {
+export function findContactsNameActionCreator(name: string) {
   return {
-    type: ADD_CONTACTS_ACTION,
+    type: FIND_CONTACTS_NAME_ACTION, 
+    payload: name
+  }
+}
 
+export function findContactsGroupIdActionCreator(groupId: string) {
+  return {
+    type: FIND_CONTACTS_GROUP_ID_ACTION, 
+    payload: groupId
   }
 }
