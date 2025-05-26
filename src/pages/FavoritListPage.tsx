@@ -1,11 +1,21 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { ContactCard } from 'src/components/ContactCard'
-import { useAppSelector } from 'src/redux/Hooks'
+import { creatorContactsAction } from 'src/redux/Action'
+import { useAppDispatch, useAppSelector } from 'src/redux/Hooks'
 
 export const FavoritListPage = memo(() => {
   const favoriteContacts = useAppSelector((state) => state.favoriteContacts)
-  const contacts = useAppSelector((state) => state.contacts)
+  const { isLoading, contacts } = useAppSelector((state) => state.contacts)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(creatorContactsAction())
+  }, [dispatch])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <Row xxl={4} className="g-4">

@@ -9,7 +9,7 @@ import { useAppSelector } from 'src/redux/Hooks'
 export const GroupPage = memo(() => {
   const { groupId } = useParams<{ groupId: string }>()
 
-  const contacts = useAppSelector((state) => state.contacts)
+  const { isLoading, contacts } = useAppSelector((state) => state.contacts)
   const groupContacts = useAppSelector((state) =>
     state.groupContacts.find(({ id }) => id === groupId)
   )
@@ -18,6 +18,10 @@ export const GroupPage = memo(() => {
     if (!groupContacts) return []
     return contacts.filter(({ id }) => groupContacts.contactIds.includes(id))
   }, [contacts, groupContacts])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <Row className="g-4">

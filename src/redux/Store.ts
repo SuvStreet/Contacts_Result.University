@@ -1,14 +1,19 @@
-import { combineReducers, legacy_createStore as createStore } from 'redux'
-import { contactsReducer } from './reduсers/ContactsReducer'
-import { groupContactsReducer } from './reduсers/GroupContactsReducer'
-import { favoriteContactsReducer } from './reduсers/FavoriteContactsReducer'
+import {
+  applyMiddleware,
+  combineReducers,
+  legacy_createStore as createStore,
+} from 'redux'
+import { contactsReducer } from './reducers/ContactsReducer'
+import { groupContactsReducer } from './reducers/GroupContactsReducer'
+import { favoriteContactsReducer } from './reducers/FavoriteContactsReducer'
+import { thunk } from 'redux-thunk'
 
-export const store = createStore(
-  combineReducers({
-    contacts: contactsReducer,
-    groupContacts: groupContactsReducer,
-    favoriteContacts: favoriteContactsReducer,
-  })
-)
+const rootReducer = combineReducers({
+  contacts: contactsReducer,
+  groupContacts: groupContactsReducer,
+  favoriteContacts: favoriteContactsReducer,
+})
 
-export type RootState = ReturnType<typeof store.getState>
+export const store = createStore(rootReducer, undefined, applyMiddleware(thunk))
+
+export type RootState = ReturnType<typeof rootReducer>
