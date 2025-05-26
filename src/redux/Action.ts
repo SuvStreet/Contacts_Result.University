@@ -1,34 +1,45 @@
+import { ThunkAction } from 'redux-thunk'
+import { DATA_CONTACT } from 'src/__data__'
 import { ContactDto } from 'src/types/dto/ContactDto'
+import { RootState } from './Store'
 
-export const FIND_CONTACTS_NAME_ACTION = 'FIND_CONTACTS_NAME_ACTION'
-export const FIND_CONTACTS_GROUP_ID_ACTION = 'FIND_CONTACTS_GROUP_ID_ACTION'
+export const LOADING_CONTACTS_ACTION = 'LOADING_CONTACTS_ACTION'
+export const LOADING_CONTACTS_SUCCESS_ACTION = 'LOADING_CONTACTS_SUCCESS_ACTION'
+export const RESET_CONTACTS_ACTION = 'RESET_CONTACTS_ACTION'
 
-interface FindContactsNameAction {
-  type: typeof FIND_CONTACTS_NAME_ACTION
-  payload: ContactDto['name']
+interface LoadingContactsAction {
+  type: typeof LOADING_CONTACTS_ACTION
 }
 
-interface FindContactsGroupIdAction {
-  type: typeof FIND_CONTACTS_GROUP_ID_ACTION
-  payload: ContactDto['id']
+interface LoadingContactsSuccessAction {
+  type: typeof LOADING_CONTACTS_SUCCESS_ACTION
+  payload: ContactDto[]
 }
 
-export function findContactsNameActionCreator(
-  name: ContactDto['name']
-): FindContactsNameAction {
-  return {
-    type: FIND_CONTACTS_NAME_ACTION,
-    payload: name,
+interface ResetContactsAction {
+  type: typeof RESET_CONTACTS_ACTION
+}
+
+export function creatorContactsAction(): ThunkAction<void, RootState, void, ProjectAction> {
+  return async (dispatch) => {
+    dispatch({ type: LOADING_CONTACTS_ACTION })
+
+    try {
+      const res: ContactDto[] = await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(DATA_CONTACT)
+          reject(new Error('Error'))
+        }, 500)
+      })
+
+      dispatch({ type: LOADING_CONTACTS_SUCCESS_ACTION, payload: res })
+    } catch (error) {
+      dispatch({ type: RESET_CONTACTS_ACTION })
+    }
   }
 }
 
-export function findContactsGroupIdActionCreator(
-  groupId: ContactDto['id']
-): FindContactsGroupIdAction {
-  return {
-    type: FIND_CONTACTS_GROUP_ID_ACTION,
-    payload: groupId,
-  }
-}
-
-export type ProjectAction = FindContactsNameAction | FindContactsGroupIdAction
+export type ProjectAction =
+  | LoadingContactsAction
+  | LoadingContactsSuccessAction
+  | ResetContactsAction
