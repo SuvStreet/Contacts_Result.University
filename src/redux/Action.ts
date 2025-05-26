@@ -1,16 +1,34 @@
+import { ContactDto } from 'src/types/dto/ContactDto'
+
 export const FIND_CONTACTS_NAME_ACTION = 'FIND_CONTACTS_NAME_ACTION'
 export const FIND_CONTACTS_GROUP_ID_ACTION = 'FIND_CONTACTS_GROUP_ID_ACTION'
 
-export function findContactsNameActionCreator(name: string) {
+interface FindContactsNameAction {
+  type: typeof FIND_CONTACTS_NAME_ACTION
+  payload: ContactDto['name']
+}
+
+interface FindContactsGroupIdAction {
+  type: typeof FIND_CONTACTS_GROUP_ID_ACTION
+  payload: ContactDto['id']
+}
+
+export function findContactsNameActionCreator(
+  name: ContactDto['name']
+): FindContactsNameAction {
   return {
-    type: FIND_CONTACTS_NAME_ACTION, 
-    payload: name
+    type: FIND_CONTACTS_NAME_ACTION,
+    payload: name,
   }
 }
 
-export function findContactsGroupIdActionCreator(groupId: string) {
+export function findContactsGroupIdActionCreator(
+  groupId: ContactDto['id']
+): FindContactsGroupIdAction {
   return {
-    type: FIND_CONTACTS_GROUP_ID_ACTION, 
-    payload: groupId
+    type: FIND_CONTACTS_GROUP_ID_ACTION,
+    payload: groupId,
   }
 }
+
+export type ProjectAction = FindContactsNameAction | FindContactsGroupIdAction
