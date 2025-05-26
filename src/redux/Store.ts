@@ -1,7 +1,7 @@
 import { combineReducers, legacy_createStore as createStore } from 'redux'
-import { contactsReducer } from './redusers/ContactsReducer'
-import { groupContactsReducer } from './redusers/GroupContactsReducer'
-import { favoriteContactsReducer } from './redusers/FavoriteContactsReducer'
+import { contactsReducer } from './reduсers/ContactsReducer'
+import { groupContactsReducer } from './reduсers/GroupContactsReducer'
+import { favoriteContactsReducer } from './reduсers/FavoriteContactsReducer'
 
 export const store = createStore(
   combineReducers({
