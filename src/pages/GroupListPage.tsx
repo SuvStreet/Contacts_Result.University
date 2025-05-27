@@ -1,10 +1,22 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
-import { useAppSelector } from 'src/redux/Hooks'
+import { creatorGroupContactsAction } from 'src/redux/Action'
+import { useAppDispatch, useAppSelector } from 'src/redux/Hooks'
 
 export const GroupListPage = memo(() => {
-  const groupContacts = useAppSelector((state) => state.groupContacts)
+  const { isLoading, groupContacts } = useAppSelector(
+    (state) => state.groupContacts
+  )
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(creatorGroupContactsAction())
+  }, [dispatch])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <Row xxl={4}>

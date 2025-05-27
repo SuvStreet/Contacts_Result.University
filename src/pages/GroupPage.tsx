@@ -1,17 +1,23 @@
-import { memo, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
 import { Empty } from 'src/components/Empty'
 import { ContactCard } from 'src/components/ContactCard'
-import { useAppSelector } from 'src/redux/Hooks'
+import { useAppDispatch, useAppSelector } from 'src/redux/Hooks'
+import { creatorGroupContactsAction } from 'src/redux/Action'
 
 export const GroupPage = memo(() => {
   const { groupId } = useParams<{ groupId: string }>()
-
+  const dispatch = useAppDispatch()
   const { isLoading, contacts } = useAppSelector((state) => state.contacts)
+
+  useEffect(() => {
+    dispatch(creatorGroupContactsAction())
+  }, [dispatch])
+
   const groupContacts = useAppSelector((state) =>
-    state.groupContacts.find(({ id }) => id === groupId)
+    state.groupContacts.groupContacts.find(({ id }) => id === groupId)
   )
 
   const currentContacts = useMemo(() => {
