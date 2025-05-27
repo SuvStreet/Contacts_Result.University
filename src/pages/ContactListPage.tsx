@@ -4,22 +4,27 @@ import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
 import { useAppDispatch, useAppSelector } from 'src/redux/Hooks'
-import { creatorContactsAction } from 'src/redux/Action'
+import {
+  creatorContactsAction,
+  creatorGroupContactsAction,
+} from 'src/redux/Action'
 
 export const ContactListPage = memo(() => {
-  const { isLoading, contacts } = useAppSelector((state) => state.contacts)
   const dispatch = useAppDispatch()
-  const groupContacts = useAppSelector((state) => state.groupContacts)
+  const { isLoading, contacts } = useAppSelector((state) => state.contacts)
+  const { isLoading: isLoadingGroup, groupContacts } = useAppSelector(
+    (state) => state.groupContacts
+  )
   const [filteredContacts, setFilteredContacts] =
     useState<ContactDto[]>(contacts)
 
-
   useEffect(() => {
     dispatch(creatorContactsAction())
+    dispatch(creatorGroupContactsAction())
 
     setFilteredContacts(contacts)
   }, [dispatch, contacts])
-
+  
   const onSubmit = (fv: Partial<FilterFormValues>) => {
     let findContacts: ContactDto[] = contacts
 
@@ -43,7 +48,7 @@ export const ContactListPage = memo(() => {
     setFilteredContacts(findContacts)
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingGroup) {
     return <div>Loading...</div>
   }
 
