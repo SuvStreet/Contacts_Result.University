@@ -1,43 +1,19 @@
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto'
-import {
-  LOADING_GROUP_CONTACTS_ACTION,
-  LOADING_GROUP_CONTACTS_SUCCESS_ACTION,
-  ProjectAction,
-  RESET_GROUP_CONTACTS_ACTION,
-} from '../Action'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-const initialState = {
-  isLoading: true,
-  groupContacts: [] as GroupContactsDto[],
-}
-
-export function groupContactsReducer(
-  state = initialState,
-  action: ProjectAction
-) {
-  switch (action.type) {
-    case LOADING_GROUP_CONTACTS_ACTION:
-      return {
-        ...state,
-        isLoading: true,
-      }
-
-    case LOADING_GROUP_CONTACTS_SUCCESS_ACTION:
-      return {
-        ...state,
-        isLoading: false,
-        groupContacts: action.payload,
-      }
-
-    case RESET_GROUP_CONTACTS_ACTION: {
-      return {
-        ...state,
-        isLoading: false,
-        groupContacts: [],
-      }
+export const groupContactsApiSlice = createApi({
+  reducerPath: 'groupContactsApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl:
+      'https://fs04.gcfiles.net/fileservice/file/download/a/177331/sc/0/h',
+  }),
+  endpoints(builder) {
+    return {
+      getGroupContacts: builder.query<GroupContactsDto[], void>({
+        query: () => ({ url: '/f1e98b0d70d16a909818b03b72415733.json' }),
+      }),
     }
+  },
+})
 
-    default:
-      return state
-  }
-}
+export const { useGetGroupContactsQuery } = groupContactsApiSlice

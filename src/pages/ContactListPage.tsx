@@ -1,30 +1,30 @@
 import { memo, useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
+
 import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
-import { useAppDispatch, useAppSelector } from 'src/redux/Hooks'
-import {
-  creatorContactsAction,
-  creatorGroupContactsAction,
-} from 'src/redux/Action'
+import { useGetContactsQuery } from 'src/redux/reducers/ContactsReducer'
+import { useGetGroupContactsQuery } from 'src/redux/reducers/GroupContactsReducer'
 
 export const ContactListPage = memo(() => {
-  const dispatch = useAppDispatch()
-  const { isLoading, contacts } = useAppSelector((state) => state.contacts)
-  const { isLoading: isLoadingGroup, groupContacts } = useAppSelector(
-    (state) => state.groupContacts
+  const { data: contacts } = useGetContactsQuery()
+  const { data: groupContacts } = useGetGroupContactsQuery()
+
+  const [filteredContacts, setFilteredContacts] = useState<ContactDto[]>(
+    contacts || []
   )
-  const [filteredContacts, setFilteredContacts] =
-    useState<ContactDto[]>(contacts)
 
   useEffect(() => {
-    dispatch(creatorContactsAction())
-    dispatch(creatorGroupContactsAction())
+    if (!contacts) return
 
     setFilteredContacts(contacts)
-  }, [dispatch, contacts])
-  
+  }, [contacts])
+
+  if (!contacts || !groupContacts) {
+    return <div>Loading...</div>
+  }
+
   const onSubmit = (fv: Partial<FilterFormValues>) => {
     let findContacts: ContactDto[] = contacts
 
@@ -46,10 +46,6 @@ export const ContactListPage = memo(() => {
     }
 
     setFilteredContacts(findContacts)
-  }
-
-  if (isLoading || isLoadingGroup) {
-    return <div>Loading...</div>
   }
 
   return (

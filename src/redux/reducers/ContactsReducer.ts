@@ -1,39 +1,21 @@
 import { ContactDto } from 'src/types/dto/ContactDto'
-import {
-  LOADING_CONTACTS_ACTION,
-  LOADING_CONTACTS_SUCCESS_ACTION,
-  ProjectAction,
-  RESET_CONTACTS_ACTION,
-} from '../Action'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-const initialState = {
-  isLoading: true,
-  contacts: [] as ContactDto[],
-}
+export const contactsApiSlice = createApi({
+  reducerPath: 'contactsApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl:
+      'https://fs04.gcfiles.net/fileservice/file/download/a/177331/sc/385/h',
+  }),
+  endpoints(builder) {
+    return {
+      getContacts: builder.query<ContactDto[], void>({
+        query: () => ({
+          url: '/0afc05779dcbbebd7055a1d87b8c7c6b.json',
+        }),
+      }),
+    }
+  },
+})
 
-export function contactsReducer(state = initialState, action: ProjectAction) {
-  switch (action.type) {
-    case LOADING_CONTACTS_ACTION:
-      return {
-        ...state,
-        isLoading: true,
-      }
-
-    case LOADING_CONTACTS_SUCCESS_ACTION:
-      return {
-        ...state,
-        isLoading: false,
-        contacts: action.payload,
-      }
-
-    case RESET_CONTACTS_ACTION:
-      return {
-        ...state,
-        isLoading: false,
-        contacts: [],
-      }
-
-    default:
-      return state
-  }
-}
+export const { useGetContactsQuery } = contactsApiSlice

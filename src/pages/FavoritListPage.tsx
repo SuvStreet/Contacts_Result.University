@@ -3,17 +3,18 @@ import { Col, Row } from 'react-bootstrap'
 import { ContactCard } from 'src/components/ContactCard'
 import { creatorContactsAction } from 'src/redux/Action'
 import { useAppDispatch, useAppSelector } from 'src/redux/Hooks'
+import { useGetContactsQuery } from 'src/redux/reducers/ContactsReducer'
 
 export const FavoritListPage = memo(() => {
   const favoriteContacts = useAppSelector((state) => state.favoriteContacts)
-  const { isLoading, contacts } = useAppSelector((state) => state.contacts)
+  const { data: contacts } = useGetContactsQuery()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(creatorContactsAction())
   }, [dispatch])
 
-  if (isLoading) {
+  if (!contacts) {
     return <div>Loading...</div>
   }
 
