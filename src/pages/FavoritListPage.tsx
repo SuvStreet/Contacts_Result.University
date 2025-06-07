@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { ContactCard } from 'src/components/ContactCard'
 import { useAppSelector } from 'src/redux/Hooks'
-import { useGetContactsQuery } from 'src/redux/reducers/ContactsReducer'
+import { useGetContactsQuery } from 'src/redux/contact'
 
 export const FavoritListPage = memo(() => {
   const favoriteContacts = useAppSelector((state) => state.favoriteContacts)

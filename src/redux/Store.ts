@@ -1,14 +1,20 @@
 import { combineReducers } from 'redux'
-import { contactsApiSlice } from './reducers/ContactsReducer'
-import { groupContactsApiSlice } from './reducers/GroupContactsReducer'
-import { favoriteSlice } from './reducers/FavoriteContactsReducer'
-
 import { configureStore } from '@reduxjs/toolkit'
 
+import favoriteSliceReducer from './favorite'
+import contactsReducer, {
+  contactsMiddleware,
+  contactsReducerPath,
+} from './contact'
+import groupContactsReducer, {
+  groupContactsMiddleware,
+  groupContactsReducerPath,
+} from './group'
+
 const rootReducer = combineReducers({
-  favoriteContacts: favoriteSlice.reducer,
-  [contactsApiSlice.reducerPath]: contactsApiSlice.reducer,
-  [groupContactsApiSlice.reducerPath]: groupContactsApiSlice.reducer,
+  favoriteContacts: favoriteSliceReducer,
+  [contactsReducerPath]: contactsReducer,
+  [groupContactsReducerPath]: groupContactsReducer,
 })
 
 export const store = configureStore({
@@ -16,8 +22,8 @@ export const store = configureStore({
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
-      contactsApiSlice.middleware,
-      groupContactsApiSlice.middleware,
+      contactsMiddleware,
+      groupContactsMiddleware,
     ]),
 })
 

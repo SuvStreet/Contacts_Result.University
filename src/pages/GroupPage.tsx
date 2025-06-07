@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom'
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
 import { Empty } from 'src/components/Empty'
 import { ContactCard } from 'src/components/ContactCard'
-import { useGetContactsQuery } from 'src/redux/reducers/ContactsReducer'
-import { useGetGroupContactsQuery } from 'src/redux/reducers/GroupContactsReducer'
+import { useGetContactsQuery } from 'src/redux/contact'
+import { useGetGroupContactsQuery } from 'src/redux/group'
 
 export const GroupPage = memo(() => {
   const { groupId } = useParams<{ groupId: string }>()
@@ -18,11 +18,12 @@ export const GroupPage = memo(() => {
 
   const selectedGroupContacts = groupContacts.find(({ id }) => id === groupId)
 
-  if(!selectedGroupContacts) return <Empty />
+  if (!selectedGroupContacts) return <Empty />
 
-  const subscribedUsers = 
-   contacts.filter(({ id }) => selectedGroupContacts.contactIds.includes(id))
-  
+  const subscribedUsers = contacts.filter(({ id }) =>
+    selectedGroupContacts.contactIds.includes(id)
+  )
+
   return (
     <Row className="g-4">
       {selectedGroupContacts ? (

@@ -4,8 +4,8 @@ import { Col, Row } from 'react-bootstrap'
 import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
 import { ContactDto } from 'src/types/dto/ContactDto'
-import { useGetContactsQuery } from 'src/redux/reducers/ContactsReducer'
-import { useGetGroupContactsQuery } from 'src/redux/reducers/GroupContactsReducer'
+import { useGetContactsQuery } from 'src/redux/contact'
+import { useGetGroupContactsQuery } from 'src/redux/group'
 
 export const ContactListPage = memo(() => {
   const { data: contacts } = useGetContactsQuery()
