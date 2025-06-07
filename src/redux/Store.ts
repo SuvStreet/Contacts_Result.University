@@ -1,20 +1,24 @@
 import { combineReducers } from 'redux'
-import { contactsReducer } from './reducers/ContactsReducer'
-import { groupContactsReducer } from './reducers/GroupContactsReducer'
+import { contactsApiSlice } from './reducers/ContactsReducer'
+import { groupContactsApiSlice } from './reducers/GroupContactsReducer'
 import { favoriteContactsReducer } from './reducers/FavoriteContactsReducer'
-import { thunk } from 'redux-thunk'
+
 import { configureStore } from '@reduxjs/toolkit'
 
 const rootReducer = combineReducers({
-  contacts: contactsReducer,
-  groupContacts: groupContactsReducer,
   favoriteContacts: favoriteContactsReducer,
+  [contactsApiSlice.reducerPath]: contactsApiSlice.reducer,
+  [groupContactsApiSlice.reducerPath]: groupContactsApiSlice.reducer,
 })
 
 export const store = configureStore({
   reducer: rootReducer,
   devTools: true,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat([
+      contactsApiSlice.middleware,
+      groupContactsApiSlice.middleware,
+    ]),
 })
 
 export type RootState = ReturnType<typeof rootReducer>
