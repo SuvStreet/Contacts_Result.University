@@ -17,5 +17,3 @@ export const contactsApiSlice = createApi({
     }
   },
 })
-
-export const { useGetContactsQuery } = contactsApiSlice
