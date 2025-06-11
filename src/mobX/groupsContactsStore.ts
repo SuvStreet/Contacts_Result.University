@@ -13,6 +13,7 @@ export const groupsContactsStore = makeAutoObservable({
 
     if (result) {
       groupsContactsStore.status = 'success'
+
       groupsContactsStore.groupContacts = result
     } else {
       groupsContactsStore.status = 'error'
