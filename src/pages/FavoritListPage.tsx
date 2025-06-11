@@ -1,14 +1,19 @@
-import { memo } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
+
 import { ContactCard } from 'src/components/ContactCard'
-import { useAppSelector } from 'src/redux/Hooks'
-import { useGetContactsQuery } from 'src/redux/contact'
+import { contactsStore } from 'src/mobX/contactsStore'
 
-export const FavoritListPage = memo(() => {
-  const favoriteContacts = useAppSelector((state) => state.favoriteContacts)
-  const { data: contacts } = useGetContactsQuery()
+export const FavoritListPage = observer(() => {
+  const favoriteContacts = contactsStore.favoritContacts
+  const contacts = contactsStore.contacts
 
-  if (!contacts) {
+  useEffect(() => {
+    contactsStore.getAllContacts()
+  }, [])
+
+  if (contactsStore.status === 'pending') {
     return <div>Loading...</div>
   }
 

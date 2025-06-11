@@ -1,14 +1,21 @@
+import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
+
 import { ContactCard } from 'src/components/ContactCard'
 import { Empty } from 'src/components/Empty'
-import { useGetContactsQuery } from 'src/redux/contact'
+import { contactsStore } from 'src/mobX/contactsStore'
 
-export const ContactPage = () => {
+export const ContactPage = observer(() => {
   const { contactId } = useParams<{ contactId: string }>()
-  const { data: contacts } = useGetContactsQuery()
+  const contacts = contactsStore.contacts
 
-  if (!contacts) {
+  useEffect(() => {
+    contactsStore.getAllContacts()
+  }, [])
+
+  if (contactsStore.status === 'pending') {
     return <div>Loading...</div>
   }
 
@@ -21,4 +28,4 @@ export const ContactPage = () => {
       </Col>
     </Row>
   )
-}
+})
