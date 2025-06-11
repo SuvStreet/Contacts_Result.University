@@ -1,12 +1,18 @@
-import { memo } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
+
 import { GroupContactsCard } from 'src/components/GroupContactsCard'
-import { useGetGroupContactsQuery } from 'src/redux/group'
+import { groupsContactsStore } from 'src/mobX/groupsContactsStore'
 
-export const GroupListPage = memo(() => {
-  const { data: groupContacts } = useGetGroupContactsQuery()
+export const GroupListPage = observer(() => {
+  const groupContacts = groupsContactsStore.groupContacts
 
-  if (!groupContacts) {
+  useEffect(() => {
+    groupsContactsStore.getAllGroupContacts()
+  }, [])
+
+  if (groupsContactsStore.status === 'pending') {
     return <div>Loading...</div>
   }
 

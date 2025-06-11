@@ -1,32 +1,39 @@
-import { memo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
+import { observer } from 'mobx-react-lite'
 
 import { ContactCard } from 'src/components/ContactCard'
 import { FilterForm, FilterFormValues } from 'src/components/FilterForm'
-import { ContactDto } from 'src/types/dto/ContactDto'
-import { useGetContactsQuery } from 'src/redux/contact'
-import { useGetGroupContactsQuery } from 'src/redux/group'
 
-export const ContactListPage = memo(() => {
-  const { data: contacts } = useGetContactsQuery()
-  const { data: groupContacts } = useGetGroupContactsQuery()
+import { contactsStore } from 'src/mobX/contactsStore'
+import { groupsContactsStore } from 'src/mobX/groupsContactsStore'
 
-  const [filteredContacts, setFilteredContacts] = useState<ContactDto[]>(
+export const ContactListPage = observer(() => {
+  const contacts = contactsStore.contacts
+  const groupContacts = groupsContactsStore.groupContacts
+
+  const [filteredContacts, setFilteredContacts] = useState(
     contacts || []
   )
 
   useEffect(() => {
-    if (!contacts) return
+    contactsStore.getAllContacts()
+    groupsContactsStore.getAllGroupContacts()
+  }, [])
 
+  useEffect(() => {
     setFilteredContacts(contacts)
   }, [contacts])
 
-  if (!contacts || !groupContacts) {
+  if (
+    contactsStore.status === 'pending' ||
+    groupsContactsStore.status === 'pending'
+  ) {
     return <div>Loading...</div>
   }
 
   const onSubmit = (fv: Partial<FilterFormValues>) => {
-    let findContacts: ContactDto[] = contacts
+    let findContacts = contacts
 
     if (fv.name) {
       const fvName = fv.name.toLowerCase()
